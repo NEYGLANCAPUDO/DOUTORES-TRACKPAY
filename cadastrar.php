@@ -1,0 +1,49 @@
+<?php
+
+?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Usuário</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 40px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 450px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #dee2e6; }
+        h1 { text-align: center; color: #333; font-size: 22px; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; font-size: 13px; color: #333; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
+        .buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px; text-decoration: none; }
+        .btn-cancel { background-color: #7f8c8d; color: white; }
+        .btn-save { background-color: #2ecc71; color: white; }
+        .footer { text-align: center; font-size: 11px; color: #777; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Cadastrar Usuário</h1>
+    <form method="POST" action="cadastrar.php">
+        <div class="form-group">
+            <label>Nome Completo</label>
+            <input type="text" name="name" required>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email">
+        </div>
+        <div class="form-group">
+            <label>CPF</label>
+            <input type="text" name="cpf" placeholder="123.456.789-00" required>
+        </div>
+        <div class="buttons">
+            <a href="index.php" class="btn btn-cancel">Cancelar</a>
+            <button type="submit" class="btn btn-save">Salvar</button>
+        </div>
+    </form>
+    <div class="footer">INFORMATICA 2 ANO</div>
+</div>
+
+</body>
+</html>
