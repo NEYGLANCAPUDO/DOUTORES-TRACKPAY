@@ -12,10 +12,10 @@
 
 <div class="container">
     <h1>LOGIN</h1>
-    <form method="POST" action="../controller/cadastrar.php" novalidate>
+    <form method="POST" action="../controller/login.php" novalidate>
         <div class="form-group">
-            <label>Nome Completo</label>
-            <input type="text" name="name" required>
+            <label>EMAIL NE</label>
+            <input type="text" name="email" required>
         </div>
         
         <div class="form-group">
@@ -30,7 +30,7 @@
         <div class="buttons">
             <button class="btn btn-save"><a href="cadastrar.php" class="cadastrar-link">Criar</a></button>
             <a href="../../index.php" class="btn btn-cancel">Cancelar</a>
-            <button type="submit" class="btn btn-save">Salvar</button>
+            <button type="submit" class="btn btn-save">Login</button>
         </div>
     </form>
     <div class="footer">INFORMATICA 2 ANO</div>

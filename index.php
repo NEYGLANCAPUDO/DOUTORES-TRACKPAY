@@ -1,4 +1,13 @@
-<?php require_once('MVC/config/auth.php'); ?>
+<?php 
+session_start();
+
+require_once('MVC/config/auth.php');
+require_once('MVC/model/user.php');
+
+if (isset($_SESSION['id'])) {
+    
+$user = get_user_by_id($_SESSION['id']);}
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -10,12 +19,12 @@
     <link rel="stylesheet" href="MVC/view/style.css">
 
     <style>
-
         * {
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             min-height: 100%;
         }
 
@@ -79,7 +88,7 @@
             border: 1px solid #cfd4d8;
             border-radius: 10px;
             padding: 28px 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
 
 
@@ -245,16 +254,21 @@
             }
 
         }
-
     </style>
 
 </head>
 
 
 <body>
+    <?php if (isset($user)): ?>
+
+        <h2>
+           <?= $user['nome']; ?>
+        </h2> 
+    <?php endif; ?>
 
 
-    <!-- =========================
+        <!-- =========================
          TOPO COM LOGIN
     ========================== -->
 
@@ -432,4 +446,5 @@
 
 
 </body>
+
 </html>
