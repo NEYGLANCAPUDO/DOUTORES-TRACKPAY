@@ -103,3 +103,22 @@
 .rodape .link-politica:hover {
     background-color: #20b35b;
 }
+
+.perfil_container {
+    position: relative;
+    display: inline-block;
+}
+
+.perfil_botao {
+    width: 100px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.perfil-menu {
+    display: none;
+}
+
+.perfil-menu.aberto {
+    display: block;
+}

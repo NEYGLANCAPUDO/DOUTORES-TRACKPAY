@@ -20,7 +20,7 @@ $user = get_user_by_email($_POST["email"]);
 // Verifica se o usuário existe e se a senha confere
 if ($user && password_verify($_POST["password"], $user['senha'])) {
     $_SESSION['id'] = $user['id_usuario'];
-    header("Location: ../../index.php");
+    header("Location: ../view/usuario/index_usuario.php");
     exit;
 } else {
     $_SESSION['msg'] = "E-mail ou senha incorretos.";

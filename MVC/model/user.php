@@ -47,5 +47,20 @@ function get_user_by_id($id)
     $stmt->close();
     return $result;
 }
-
+function update_user($id, $nome, $email)
+{
+    $conn = conn();
+    $stmt = $conn->prepare("UPDATE user SET nome = ?, email = ? WHERE id_usuario = ? ");
+    $stmt->bind_param("ssi", $nome, $email, $id);
+    $stmt->execute();
+    $stmt->close();
+}
+function delete_user($id)
+{
+    $conn = conn();
+    $stmt = $conn->prepare("DELETE FROM user WHERE id_usuario = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $stmt->close();
+}
 ?>
