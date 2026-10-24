@@ -17,6 +17,7 @@ $user = get_user_by_id($_SESSION['id']);}
     <title>Organizador Financeiro</title>
 
     <link rel="stylesheet" href="MVC/view/style.css">
+    <link rel="stylesheet" href="assets/fontawesome-free-7.3.1-web/css/all.min.css">
 
     <style>
         * {
@@ -277,11 +278,21 @@ $user = get_user_by_id($_SESSION['id']);}
         <h1>Organizador Financeiro</h1>
 
         <div class="top-bar">
-
-            <a href="MVC/view/login.php" class="btn-new">
-                <i class="fa-solid fa-plus"></i> Novo usuário
-            </a>
-
+            <?php if (isset($_SESSION['id'])): ?>
+                <a href="MVC/view/usuario/index_usuario.php" class="btn-new">
+                    <i class="fa-solid fa-wallet"></i> Minhas contas
+                </a>
+                <a href="MVC/controller/usuarioController.php?acao=logout" class="btn-new">
+                    Sair
+                </a>
+            <?php else: ?>
+                <a href="MVC/view/login.php" class="btn-new">
+                    <i class="fa-solid fa-right-to-bracket"></i> Login
+                </a>
+                <a href="MVC/view/login.php" class="btn-new">
+                    <i class="fa-solid fa-user-plus"></i> Login
+                </a>
+            <?php endif; ?>
         </div>
 
     </div>

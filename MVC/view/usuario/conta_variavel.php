@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="style_usuario.css">
 </head>
 <body>
-    <form method="POST" action="../../controller/cadastrarBill.php">
+    <form method="POST" action="../../controller/billController.php?acaoBill=cadastrarBill">
         Insira conta: <br>
         Nome da conta: <input type="text" name="descricao" required> <br>
         Valor da conta: <input type="number" name="valor" required> <br>
@@ -22,6 +22,7 @@
                 <option value="2">Média</option>
                 <option value="1">Baixa</option>
             </select> <br>
-        <button type="submit">Confirmar
+        <button type="submit">Confirmar </button> <br>
+        <a class="botao-link" href="index_usuario.php">Voltar para a sua página
     </form>
 </body>

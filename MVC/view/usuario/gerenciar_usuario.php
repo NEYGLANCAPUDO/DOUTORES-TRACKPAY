@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['id'])) {
-    header("Location: ../../login.php");
+    header("Location: ../login.php");
     exit;
 }
 
@@ -24,16 +24,15 @@ $user = get_user_by_id($_SESSION['id']);
 </head>
 <body>
     <p> Olá <?= $user['nome']  ?>, seu email é:<?= $user['email'] ?>. </p>
-    <form method="POST" action="../../controller/deleteUser.php">
+    <form method="POST" action="../../controller/usuarioController.php?acao=apagar_usuario">
         <button type="submit">Apagar sua conta</button>
     </form>
-    <form method="POST" action="../../controller/updateUser.php">
-        <label> Mudar seu nome </label>
-        <input type="text" name="nome" value="<?= $user['nome'] ?>" required>
-        <input type="text" name="email" value="<?= $user['email'] ?>" required>
+    <form method="POST" action="../../controller/usuarioController.php?acao=atualizar_usuario">
+        <label> Mudar seu nome: </label>
+        <input type="text" name="nome" value="<?= $user['nome'] ?>" required> <br>
+        <label> Mudar seu email: </label>
+        <input type="text" name="email" value="<?= $user['email'] ?>" required> <br>
         <button type=submit>Confirmar</button>
     </form>
-
-    
     <a class="botao-link" href="index_usuario.php">Voltar para a sua página
 </body>
