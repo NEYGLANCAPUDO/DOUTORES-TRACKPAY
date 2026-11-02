@@ -55,7 +55,7 @@ if (!$user) {
             </div>
             <hr>
             <div class="timeline">
-                <h2>Linha do tempo</h2>
+                <a href="timeline_usuario.php">Linha do tempo</a>
             </div>
 
             <div class="pill-tag">
