@@ -77,6 +77,7 @@ usort($billsUsuario, function ($a, $b) {
     <link rel="stylesheet" href="style_usuario.css">
 </head>
 <body>
+    <a href="index_usuario.php">Voltar a página principal</a>
     <p>Essa é sua linha do tempo financeira:</p>
     <p>Hoje é dia <?= htmlspecialchars($dataHoje, ENT_QUOTES, 'UTF-8') ?></p>
     <div class="all-timeline">

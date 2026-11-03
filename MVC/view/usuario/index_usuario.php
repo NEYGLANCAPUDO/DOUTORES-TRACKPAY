@@ -85,6 +85,9 @@ if (!$user) {
                                     }
                                 ?></p>
                                 <p><?= htmlspecialchars($bill['description'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                <form method="POST" action="../../controller/billController.php?acaoBill=paidBill">
+                                    <input type="hidden" name="id_bill" value="<?php= $bill=['id']; ?>">
+                                    <input type="checkbox" name="paidBill value="1" onchange="this.form.submit()">
                                 <form method="POST" action="../../controller/billController.php?acaoBill=deletarBill">
                                     <input type="hidden" name="id_conta" value="<?= (int) $bill['id']; ?>">
                                     <button type="submit" class="btn btn-red">Apagar conta</button>
@@ -110,6 +113,13 @@ if (!$user) {
                 <input type="text" name="name" id="new-bill-name" placeholder="Ex.: Mensalidade" required>
             </div>
             <div class="field">
+                <label for="type">Tipo de conta:</label>
+                <select name="type" id="type">
+                    <option value="fixed">Conta fixa</option>
+                    <option value="variable">Conta variável</option>
+                </select>
+            </div>
+            <div class="field">
                 <label for="category">Categoria</label>
                 <select name="category" id="category">
                     <option value="" selected>Selecione uma categoria:</option>
@@ -124,9 +134,13 @@ if (!$user) {
                 <label for="new-bill-price">Valor da conta</label>
                 <input type="text" name="price" id="new-bill-price" placeholder="R$ 0,00" inputmode="numeric" required>
             </div>
-            <div class="field">
-                <label for="new-bill-date">Dia de vencimento</label>
-                <input type="date" name="due_date" id="new-bill-date" required>
+            <div id="fixedFields">
+                <label>Data de vencimento:</label>
+                <input type="date" name="due_date">
+            </div>
+            <div id="variableFields" style="display: none;">
+                <label>Data do gasto:</label>
+                <input type="date" name="data_gasto">
             </div>
             <div class="field">
                 <label for="description">Descrição</label>
@@ -157,6 +171,47 @@ if (!$user) {
 
     <script src="../../../assets/js/scrollIntooView.js"></script>
     <script>
+        const typeSelect = document.getElementById('type');
+
+        const fixedFields = document.getElementById('fixedFields');
+        const variableFields = document.getElementById('variableFields');
+
+        typeSelect.addEventListener('change', function() {
+
+        if (typeSelect.value === 'fixed') {
+
+        fixedFields.style.display = 'block';
+        variableFields.style.display = 'none';
+
+        } else {
+
+        fixedFields.style.display = 'none';
+        variableFields.style.display = 'block';
+
+        }
+});
+
+        const fixedInput = fixedFields.querySelector('input');
+        const variableInput = variableFields.querySelector('input');
+
+    typeSelect.addEventListener('change', function() {
+
+        if (typeSelect.value === 'fixed') {
+            fixedFields.style.display = 'block';
+            variableFields.style.display = 'none';
+
+            fixedInput.disabled = false;
+            variableInput.disabled = true;
+
+        } else {
+            fixedFields.style.display = 'none';
+            variableFields.style.display = 'block';
+
+            fixedInput.disabled = true;
+            variableInput.disabled = false;
+        }
+
+});
         const priceInput = document.getElementById('new-bill-price');
         priceInput.addEventListener('input', () => {
             const value = priceInput.value.replace(/\D/g, '');

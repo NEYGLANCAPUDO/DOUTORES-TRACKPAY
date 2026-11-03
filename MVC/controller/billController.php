@@ -24,6 +24,13 @@ class billController {
             exit;
         }
     }
+    public function paidBill() {
+        {
+            $id = $_SESSION['id'];
+            $paid = $_SESSION['paidBill'];
+            
+        }
+    }
 }
 $acaoBill = $_REQUEST['acaoBill'] ?? null;
 
