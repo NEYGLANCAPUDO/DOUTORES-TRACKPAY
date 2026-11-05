@@ -13,27 +13,55 @@ require_once(__DIR__ . "/../../config/auth.php");
 require_once(__DIR__ . "/../../model/user.php");
 
 $user = get_user_by_id($_SESSION['id']);
+
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <title>gerenciar_usuario</title>
-    <link rel="stylesheet" href="style_usuario.css">
-</head>
-<body>
-    <p> Olá <?= $user['nome']  ?>, seu email é:<?= $user['email'] ?>. </p>
-    <form method="POST" action="../../controller/deleteUser.php">
-        <button type="submit">Apagar sua conta</button>
-    </form>
-    <form method="POST" action="../../controller/updateUser.php">
-        <label> Mudar seu nome </label>
-        <input type="text" name="nome" value="<?= $user['nome'] ?>" required>
-        <input type="text" name="email" value="<?= $user['email'] ?>" required>
-        <button type=submit>Confirmar</button>
-    </form>
+    <title>Gerenciar usuário</title>
 
-    
-    <a class="botao-link" href="index_usuario.php">Voltar para a sua página
+    <link rel="stylesheet" href="gerenciar.css">
+</head>
+
+<body>
+
+    <div class="gerenciar-container">
+
+        <h1>Gerenciar usuário</h1>
+
+        <p>
+            Olá <strong><?= $user['nome'] ?></strong>,
+            seu email é: <?= $user['email'] ?>.
+        </p>
+
+        <form method="POST" action="../../controller/deleteUser.php">
+            <button type="submit" class="btn-apagar">
+                Apagar sua conta
+            </button>
+        </form>
+
+        <form method="POST" action="../../controller/updateUser.php">
+
+            <label>Mudar seus dados</label>
+
+            <input type="text" name="nome"
+                value="<?= $user['nome'] ?>" required>
+
+            <input type="email" name="email"
+                value="<?= $user['email'] ?>" required>
+
+            <button type="submit">Confirmar</button>
+
+        </form>
+
+        <a class="botao-link" href="index_usuario.php">
+            Voltar para a sua página
+        </a>
+
+    </div>
+
 </body>
+</html>
