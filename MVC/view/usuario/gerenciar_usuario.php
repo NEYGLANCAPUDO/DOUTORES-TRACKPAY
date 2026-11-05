@@ -84,4 +84,4 @@ $user = get_user_by_id($_SESSION['id']);
     </form>
     <a class="botao-link" href="index_usuario.php">Voltar para a sua página
 </body>
->>>>>>> 8679dd7acb8239ce5c03a248c875506eb8227e87
+

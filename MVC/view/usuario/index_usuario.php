@@ -29,21 +29,21 @@ if (!$user) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
+
 
     <title>Organizador Financeiro</title>
 
     <link rel="stylesheet" href="menu.css">
-=======
+
     <title>Minhas contas | TrackPay</title>
     <link rel="stylesheet" href="../../../assets/fontawesome-free-7.3.1-web/css/all.min.css">
     <link rel="stylesheet" href="../../../assets/css/style.css">
     <link rel="stylesheet" href="../../../assets/css/index.css">
->>>>>>> 8679dd7acb8239ce5c03a248c875506eb8227e87
+
 </head>
 
 <body>
-<<<<<<< HEAD
+
 
     <header class="menu-superior">
 
