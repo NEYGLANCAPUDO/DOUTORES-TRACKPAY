@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['id'])) {
-    header("Location: ../../login.php");
+    header("Location: ../login.php");
     exit;
 }
 
@@ -21,6 +21,7 @@ $user = get_user_by_id($_SESSION['id']);
 
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <title>Gerenciar usuário</title>
 
     <link rel="stylesheet" href="gerenciar.css">
@@ -65,3 +66,22 @@ $user = get_user_by_id($_SESSION['id']);
 
 </body>
 </html>
+=======
+    <title>gerenciar_usuario</title>
+    <link rel="stylesheet" href="style_usuario.css">
+</head>
+<body>
+    <p> Olá <?= $user['nome']  ?>, seu email é:<?= $user['email'] ?>. </p>
+    <form method="POST" action="../../controller/usuarioController.php?acao=apagar_usuario">
+        <button type="submit">Apagar sua conta</button>
+    </form>
+    <form method="POST" action="../../controller/usuarioController.php?acao=atualizar_usuario">
+        <label> Mudar seu nome: </label>
+        <input type="text" name="nome" value="<?= $user['nome'] ?>" required> <br>
+        <label> Mudar seu email: </label>
+        <input type="text" name="email" value="<?= $user['email'] ?>" required> <br>
+        <button type=submit>Confirmar</button>
+    </form>
+    <a class="botao-link" href="index_usuario.php">Voltar para a sua página
+</body>
+>>>>>>> 8679dd7acb8239ce5c03a248c875506eb8227e87

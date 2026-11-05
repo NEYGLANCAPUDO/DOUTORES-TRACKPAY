@@ -1,0 +1,346 @@
+.header {
+    width: 90%;
+    max-width: 850px;
+    margin: 25px auto 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 22px;
+    color: #374151;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+}
+
+.profile {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.profile-photo {
+    display: flex;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #606870;
+    outline: 3px solid #4e93e2;
+    outline-offset: 2px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: .35s ease;
+}
+
+
+.profile-photo:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
+.profile-photo i {
+    padding-right: 0.5px;
+    color: #e0e0e0;
+}
+
+/* =========================
+    CARD PRINCIPAL
+========================= */
+
+.container {
+    width: 90%;
+    max-width: 850px;
+    margin: 20px auto 25px auto;
+    background-color: #f7f7f7;
+    border: 1px solid #cfd4d8;
+    border-radius: 10px;
+    padding: 28px 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.father {
+    background-color: #ffffff;
+    border: 1px solid #d4d8dc;
+    border-left: 3px solid #2aac6f;
+    border-radius: 7px;
+    padding: 16px;
+}
+
+/* =========================
+    Gráfico
+========================= */
+
+.graphic {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    width: 300px;
+    height: 300px;
+    background-color: #eef1f4;
+    border-radius: 50%;
+    outline: 2px solid black;
+    outline-offset: 3px;
+    margin-bottom: 20px;
+}
+
+/* =========================
+    Timeline
+========================= */
+
+.timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    outline: 2px solid black;
+    margin: 20px 0px;
+}
+
+/* ==========================
+    Nova conta
+===========================*/
+
+.pill-tag {
+    width: 200px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    border-radius: 50px;
+    outline: 2px solid black;
+}
+
+.pill-tag button {
+    text-align: center;
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+    background-color: #258b5b00;
+    border-color: #258b5b00;
+}
+
+.pill-tag button:hover {
+    cursor: pointer;
+}
+
+/* =========================
+    Grade de contas
+========================= */
+
+.bills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    padding-top: 20px;
+}
+
+/* =========================
+    Grade de contas
+========================= */
+
+.bill {
+    flex: 1;
+    width: 230px;
+    border-left: 4px solid #2fa86f;
+    background-color: #f2f3f4;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.bill h4 {
+    font-size: medium;
+}
+
+.bill p {
+    font-size: medium;
+}
+
+/* =========================
+    Nova conta
+========================= */
+
+.new-bill-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.new-bill {
+    width: 350px;
+    border-radius: 8px;
+}
+
+.new-bill h3 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    align-self: center;
+}
+
+/* =========================
+    TÍTULO
+========================= */
+
+.container-inicial h2 {
+    text-align: center;
+    font-size: 23px;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.descricao {
+    text-align: center;
+    font-size: 14px;
+    color: #606870;
+    margin-bottom: 25px;
+}
+
+
+/* =========================
+   COMO FUNCIONA
+========================= */
+
+.titulo-secao {
+    font-size: 17px;
+    margin-bottom: 15px;
+    color: #374151;
+}
+
+.passos {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.passo {
+    flex: 1;
+    background-color: #ffffff;
+    border: 1px solid #d4d8dc;
+    border-radius: 7px;
+    padding: 15px;
+    text-align: center;
+}
+
+.numero {
+    width: 28px;
+    height: 28px;
+    margin: 0 auto 8px auto;
+    background-color: #2fa86f;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.passo h3 {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.passo p {
+    font-size: 12px;
+    color: #666;
+    line-height: 17px;
+}
+
+
+/* =========================
+    EXEMPLOS
+========================= */
+
+.exemplo {
+    background-color: #ffffff;
+    border: 1px solid #d4d8dc;
+    border-radius: 7px;
+    padding: 16px;
+}
+
+.exemplo h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #374151;
+}
+
+.blocos-exemplo {
+    display: flex;
+    gap: 10px;
+}
+
+.bloco {
+    flex: 1;
+    border-left: 4px solid #2fa86f;
+    background-color: #f2f3f4;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.bloco h4 {
+    font-size: 13px;
+    margin-bottom: 5px;
+    color: #374151;
+}
+
+.bloco p {
+    font-size: 11px;
+    color: #666;
+    line-height: 16px;
+}
+
+
+/* =========================
+    RODAPÉ
+========================= */
+
+.rodape {
+    margin-top: auto;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
+
+.rodape .link-politica {
+    display: inline-block;
+    background-color: #2fa86f;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 6px 10px;
+    margin: 2px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+.rodape .link-politica:hover {
+    background-color: #258b5b;
+}
+
+
+/* =========================
+    CELULAR
+========================= */
+
+@media (max-width: 650px) {
+
+    .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .passos {
+        flex-direction: column;
+    }
+
+    .blocos-exemplo {
+        flex-direction: column;
+    }
+
+}
