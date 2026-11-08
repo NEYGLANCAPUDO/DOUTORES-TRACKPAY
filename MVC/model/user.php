@@ -77,10 +77,8 @@ function delete_user($id) {
             $stmt->close();
             }
         $db->commit();
-    } catch(Throwable $e) {
+    } catch (Throwable $e) {
         $db->rollback();
         throw $e;
-    } finally {
-        $db->close();
     }
 }
