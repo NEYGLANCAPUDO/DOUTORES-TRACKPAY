@@ -1,0 +1,106 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #eef0f2;
+    color: #26384d;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.gerenciar-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 40px;
+    background-color: #f8f8f8;
+    border: 1px solid #d2d7dc;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 30px;
+    color: #26384d;
+}
+
+p {
+    font-size: 16px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+form {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+input[type="text"],
+input[type="email"] {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #cfd5da;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: white;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2da875;
+    box-shadow: 0 0 5px rgba(45, 168, 117, 0.25);
+}
+
+button {
+    background-color: #2da875;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #23875e;
+}
+
+.btn-apagar {
+    background-color: #dc4c4c;
+}
+
+.btn-apagar:hover {
+    background-color: #b83232;
+}
+
+.botao-link {
+    display: inline-block;
+    color: #269c70;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.botao-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .gerenciar-container {
+        padding: 25px 18px;
+    }
+}

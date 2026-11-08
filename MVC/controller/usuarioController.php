@@ -1,124 +1,77 @@
 <?php
 session_start();
-require_once(__DIR__ . "/../model/user.php");
-
+date_default_timezone_set('America/Boa_Vista');
+require_once __DIR__ . '/../model/user.php';
 class usuarioController {
-
+    private function usuarioLogado() {
+    if(empty($_SESSION['id'])) $this->voltar('../view/login.php', 'Faça login primeiro.');
+    return (int)$_SESSION['id'];
+    }
+    private function voltar($pagina, $mensagem = '') {
+        if($mensagem != '') $_SESSION['msg'] = $mensagem;
+        header('Location: '.$pagina);
+        exit;
+    }
+    private function conferirFormulario() {
+        if(($_SERVER['REQUEST_METHOD'] ?? '') != 'POST') $this->voltar('../view/login.php', 'Envie o formulário corretamente.');
+    }
     public function cadastrar() {
-        if (
-            empty($_POST['name'])
-            || empty($_POST['email'])
-            || empty($_POST['password'])
-            || empty($_POST['pass_verify'])
-        ) {
-            $_SESSION['msg'] = "Preencha todos os campos devidamente porra.";
-            header("Location: ../view/cadastrar.php");
-            exit;
-        } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['msg'] = "TEM QUE TER @";
-            header("Location: ../view/cadastrar.php");
-            exit;
-        } elseif ($_POST["password"] != $_POST["pass_verify"]) {
-            $_SESSION["msg"] = "as senhas precisam ser as mesmas porra";
-            header("Location: ../view/cadastrar.php");
-            exit;
-        } elseif (strlen($_POST['password']) < 8 || strlen($_POST['pass_verify']) < 8) {
-            $_SESSION['msg'] = 'A SENHA TEM QUE SER MAIOR QUE OITO PORRA';
-            header("Location: ../view/cadastrar.php");
-            exit;
-        } elseif (check_email($_POST["email"])) {
-            $_SESSION['msg'] = 'JA EXITE ESSE GMAIL LOKO, OS 2 NE';
-            header("Location: ../view/cadastrar.php");
-            exit;
-        } else {
-            $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
-            create_user($_POST["name"], $_POST["email"], $password);
-            $_SESSION['msg'] = 'AGORA DEU PORRA';
-            header("Location: ../view/login.php");
-            exit;
-        }
+        $this->conferirFormulario();
+        $nome = trim((string)($_POST['name'] ?? ''));
+        $email = strtolower(trim((string)($_POST['email'] ?? '')));
+        $senha = (string)($_POST['password'] ?? '');
+        if($nome == '' || strlen($nome) > 100 || strlen($email) > 100 || !filter_var($email, FILTER_VALIDATE_EMAIL)) $this->voltar('../view/cadastrar.php', 'Nome ou e-mail inválido.');
+        if(strlen($senha) < 8 || $senha != (string)($_POST['pass_verify'] ?? '')) $this->voltar('../view/cadastrar.php', 'A senha deve ter pelo menos 8 caracteres e ser igual à confirmação.');
+        if(check_email($email)) $this->voltar('../view/cadastrar.php', 'Esse e-mail já está cadastrado.');
+        create_user($nome, $email, password_hash($senha, PASSWORD_DEFAULT));
+        $this->voltar('../view/login.php', 'Cadastro concluído! Faça login.');
     }
-
-    public function logar() {
-        if (empty($_POST['email']) || empty($_POST['password'])) {
-            $_SESSION['msg'] = "Preencha todos os campos devidamente.";
-            header("Location: ../view/login.php");
-            exit;
-        } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['msg'] = "TEM QUE TER @";
-            header("Location: ../view/login.php");
-            exit;
-        } elseif (strlen($_POST['password']) < 8) {
-            $_SESSION['msg'] = 'COLOCA SENHA MAIOR QUE 8';
-            header("Location: ../view/login.php");
-            exit;
-        }
-
-        $user = get_user_by_email($_POST["email"]);
-
-        // Verifica se o usuário existe e se a senha confere
-        if ($user && password_verify($_POST["password"], $user['senha'])) {
-            $_SESSION['id'] = $user['id'];
-            header("Location: ../view/usuario/index_usuario.php");
-            exit;
-        } else {
-            $_SESSION['msg'] = "E-mail ou senha incorretos.";
-            header("Location: ../view/login.php");
-            exit;
-        }
-    }
-
     public function atualizar_usuario() {
-        $id = $_SESSION['id'];
-        $user = get_user_by_id($id);
-
-        if (!empty($_POST['nome'])) {
-            $name = $_POST['nome'];
-        } else {
-            $name = $user['nome'];
-        }
-
-        if (!empty($_POST['email'])) {
-            $email = $_POST['email'];
-        } else {
-            $email = $user['email'];
-        }
-
-        update_user($id, $name, $email);
-        header("Location: ../view/usuario/gerenciar_usuario.php");
-        exit;
+        $this->conferirFormulario();
+        $id = $this->usuarioLogado();
+        $nome = trim((string)($_POST['nome'] ?? ''));
+        $email = strtolower(trim((string)($_POST['email'] ?? '')));
+        if($nome == '' || strlen($nome) > 100 || strlen($email) > 100 || !filter_var($email, FILTER_VALIDATE_EMAIL)) $this->voltar('../view/usuario/gerenciar_usuario.php', 'Dados inválidos.');
+        if($email != strtolower(get_user_by_id($id)['email']) && check_email($email)) $this->voltar('../view/usuario/gerenciar_usuario.php', 'Esse e-mail já está em uso.');
+        update_user($id, $nome, $email);
+        $this->voltar('../view/usuario/gerenciar_usuario.php', 'Dados atualizados.');
     }
-
     public function apagar_usuario() {
-        $id = $_SESSION['id'];
-        delete_user($id);
+        $this->conferirFormulario();
+        delete_user($this->usuarioLogado());
+        $_SESSION = [];
         session_destroy();
-        header("Location: ../../index.php");
-        exit;
+        $this->voltar('../../index.php');
     }
-
+    public function logar() {
+        $this->conferirFormulario();
+        $email = strtolower(trim((string)($_POST['email'] ?? '')));
+        $senha = (string)($_POST['password'] ?? '');
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL) || $senha == '') $this->voltar('../view/login.php', 'Preencha e-mail e senha.');
+        $usuario = get_user_by_email($email);
+        if(!$usuario || !password_verify($senha, $usuario['senha'])) $this->voltar('../view/login.php', 'E-mail ou senha incorretos.');
+        session_regenerate_id(true);
+        $_SESSION['id'] = (int)$usuario['id'];
+        $this->voltar('../view/usuario/index_usuario.php');
+    }
     public function logout() {
-        $_SESSION = array();
+        $_SESSION = [];
         session_destroy();
-        header("Location: ../../index.php");
-        exit;
+        $this->voltar('../../index.php');
     }
 }
-
-$acao = $_REQUEST['acao'] ?? null;
-
-if ($acao) {
-    $instancia = new usuarioController();
-
-    if ($acao == 'cadastrar') {
-        $instancia->cadastrar();
-    } elseif ($acao == 'logar') {
-        $instancia->logar();
-    } elseif ($acao == 'atualizar_usuario') {
-        $instancia->atualizar_usuario();
-    } elseif ($acao == 'apagar_usuario') {
-        $instancia->apagar_usuario();
-    } elseif ($acao == 'logout') {
-        $instancia->logout();
-    }
+$acao = (string)($_POST['acao'] ?? $_GET['acao'] ?? '');
+$controller = new usuarioController();
+if(!in_array($acao, ['cadastrar','logar','logout','atualizar_usuario','apagar_usuario'], true)) {
+    $_SESSION['msg'] = 'Ação inválida.';
+    header('Location: ../view/login.php');
+    exit;
+}
+try {
+    $controller->$acao();
+} catch(Throwable $erro) {
+    error_log('TrackPay usuário: '.$erro->getMessage());
+    $_SESSION['msg'] = 'Erro ao salvar. Confira a conexão com o banco.';
+    header('Location: '.($acao == 'cadastrar' ? '../view/cadastrar.php' : '../view/login.php'));
+    exit;
 }

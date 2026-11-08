@@ -1,12 +1,17 @@
-<?php 
+<?php
 session_start();
 
-require_once('MVC/config/auth.php');
 require_once('MVC/model/user.php');
 
+$user = null;
+
 if (isset($_SESSION['id'])) {
-    
-$user = get_user_by_id($_SESSION['id']);}
+    $user = get_user_by_id((int) $_SESSION['id']);
+
+    if (!$user) {
+        unset($_SESSION['id']);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -264,7 +269,7 @@ $user = get_user_by_id($_SESSION['id']);}
     <?php if (isset($user)): ?>
 
         <h2>
-           <?= $user['nome']; ?>
+           <?= htmlspecialchars($user['nome'], ENT_QUOTES, 'UTF-8'); ?>
         </h2> 
     <?php endif; ?>
 

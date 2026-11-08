@@ -1,19 +1,15 @@
 <?php
 session_start();
+date_default_timezone_set('America/Boa_Vista');
 
 if (!isset($_SESSION['id'])) {
     header('Location: ../login.php');
     exit;
 }
-
-require_once(__DIR__ . '/../../model/user.php');
-require_once(__DIR__ . '/../../model/bill.php');
-require_once(__DIR__ . '/../../model/category.php');
+require_once __DIR__ . '/../../model/user.php';
+require_once __DIR__ . '/../../model/bill.php';
 
 $user = get_user_by_id((int) $_SESSION['id']);
-$bills = get_bills();
-$categories = get_categories();
-
 if (!$user) {
     $_SESSION = [];
     session_destroy();
@@ -21,53 +17,16 @@ if (!$user) {
     exit;
 }
 
-date_default_timezone_set('America/Boa_Vista');
-
+$navigation = month_navigation();
+$month = $navigation['current'];
+$billsUsuario = get_bills((int)$_SESSION['id'], $month);
 $dataHoje = date('d/m/Y');
-$hoje = new DateTime('today');
-
-$billsUsuario = [];
-
-foreach ($bills as $bill) {
-    if ((int) $bill['user_id'] === (int) $user['id']) {
-        $billsUsuario[] = $bill;
-    }
-}
-
 foreach ($billsUsuario as &$bill) {
-    $diaVencimento = (int) $bill['due_date'];
-
-    $dataVencimento = new DateTime(
-        $hoje->format('Y-m-01')
-    );
-
-    $ultimoDiaMes = (int) $dataVencimento->format('t');
-
-    $dataVencimento->setDate(
-        (int) $dataVencimento->format('Y'),
-        (int) $dataVencimento->format('m'),
-        min($diaVencimento, $ultimoDiaMes)
-    );
-
-    if ($dataVencimento < $hoje) {
-        $dataVencimento->modify('first day of next month');
-
-        $ultimoDiaMes = (int) $dataVencimento->format('t');
-
-        $dataVencimento->setDate(
-            (int) $dataVencimento->format('Y'),
-            (int) $dataVencimento->format('m'),
-            min($diaVencimento, $ultimoDiaMes)
-        );
-    }
-
-    $bill['next_due_date'] = $dataVencimento->format('Y-m-d');
+    $date = bill_date_for_month($bill, new DateTimeImmutable($month . '-01'));
+    $bill['next_due_date'] = $date ? $date->format('Y-m-d') : $month . '-01';
 }
-
 unset($bill);
-usort($billsUsuario, function ($a, $b) {
-    return $a['next_due_date'] <=> $b['next_due_date'];
-});
+usort($billsUsuario, fn($a, $b) => strcmp($a['next_due_date'], $b['next_due_date']));
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -77,9 +36,14 @@ usort($billsUsuario, function ($a, $b) {
     <link rel="stylesheet" href="style_usuario.css">
 </head>
 <body>
-    <a href="index_usuario.php">Voltar a página principal</a>
+    <a href="index_usuario.php?mes=<?= urlencode($month) ?>">Voltar a página principal</a>
     <p>Essa é sua linha do tempo financeira:</p>
     <p>Hoje é dia <?= htmlspecialchars($dataHoje, ENT_QUOTES, 'UTF-8') ?></p>
+    <nav aria-label="Navegação por mês">
+        <a href="?mes=<?= urlencode($navigation['previous']) ?>">&#10094; Anterior</a>
+        <strong><?= htmlspecialchars((new DateTimeImmutable($month . '-01'))->format('m/Y'), ENT_QUOTES, 'UTF-8') ?></strong>
+        <a href="?mes=<?= urlencode($navigation['next']) ?>">Próximo &#10095;</a>
+    </nav>
     <div class="all-timeline">
         <?php foreach ($billsUsuario as $bill): ?>
             <div class="event-timeline">

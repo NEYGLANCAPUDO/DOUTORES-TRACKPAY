@@ -1,11 +1,9 @@
 <?php
 
-function conn(){
-$conn = mysqli_connect('localhost', 'root', '', 'trackpay');
-if(!$conn){
-    die('ERRO AO CONECTAR'. mysqli_connect_error());
-}
-return $conn;
-}
+function conn(): mysqli
+{
+    $conn = new mysqli('127.0.0.1', 'root', '', 'trackpay', 3306);
+    $conn->set_charset('utf8mb4');
 
-?>
+    return $conn;
+}

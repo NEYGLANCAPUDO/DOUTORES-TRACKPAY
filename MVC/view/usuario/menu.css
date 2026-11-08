@@ -1,0 +1,73 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #eef0f2;
+    min-height: 100vh;
+}
+
+/* Menu superior */
+.menu-superior {
+    width: 100%;
+    min-height: 82px;
+    background-color: #ffffff;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px 5%;
+
+    border-bottom: 1px solid #d5dadd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Nome do sistema */
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #26384d;
+}
+
+/* Botões do menu */
+.menu-superior nav {
+    display: flex;
+    gap: 15px;
+}
+
+.botao-link {
+    display: inline-block;
+    background-color: #2da875;
+    color: white;
+
+    text-decoration: none;
+    padding: 12px 20px;
+
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.botao-link:hover {
+    background-color: #23875e;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .menu-superior {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .menu-superior nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

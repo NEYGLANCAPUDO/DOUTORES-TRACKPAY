@@ -1,5 +1,7 @@
+
 <?php
 session_start();
+date_default_timezone_set('America/Boa_Vista');
 
 if (!isset($_SESSION['id'])) {
     header('Location: ../login.php');
@@ -11,7 +13,9 @@ require_once(__DIR__ . '/../../model/bill.php');
 require_once(__DIR__ . '/../../model/category.php');
 
 $user = get_user_by_id((int) $_SESSION['id']);
-$bills = get_bills();
+$navigation = month_navigation();
+$month = $navigation['current'];
+$bills = get_bills((int)$_SESSION['id'], $month);
 $categories = get_categories();
 
 if (!$user) {
@@ -21,17 +25,29 @@ if (!$user) {
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>Organizador Financeiro</title>
+
+    <link rel="stylesheet" href="menu.css">
+
     <title>Minhas contas | TrackPay</title>
     <link rel="stylesheet" href="../../../assets/fontawesome-free-7.3.1-web/css/all.min.css">
     <link rel="stylesheet" href="../../../assets/css/style.css">
     <link rel="stylesheet" href="../../../assets/css/index.css">
+
 </head>
+
 <body>
+
+
     <header>
         <div class="header">
             <div class="profile">
@@ -55,7 +71,7 @@ if (!$user) {
             </div>
             <hr>
             <div class="timeline">
-                <a href="timeline_usuario.php">Linha do tempo</a>
+                <a href="timeline_usuario.php?mes=<?= urlencode($month) ?>">Linha do tempo</a>
             </div>
 
             <div class="pill-tag">
@@ -64,6 +80,15 @@ if (!$user) {
                 </button>
             </div>
 
+            <nav aria-label="Navegar entre meses" style="display:flex;justify-content:center;align-items:center;gap:1rem;margin:1rem 0;">
+                <a href="?mes=<?= urlencode($navigation['previous']) ?>" aria-label="Mês anterior">&#10094;</a>
+                <strong><?= htmlspecialchars((new DateTimeImmutable($month . '-01'))->format('m/Y'), ENT_QUOTES, 'UTF-8') ?></strong>
+                <a href="?mes=<?= urlencode($navigation['next']) ?>" aria-label="Próximo mês">&#10095;</a>
+            </nav>
+            <?php if(isset($_SESSION['msg'])): ?>
+                <p role="status"><?= htmlspecialchars($_SESSION['msg'], ENT_QUOTES, 'UTF-8') ?></p>
+                <?php unset($_SESSION['msg']); ?>
+            <?php endif; ?>
             <div class="bills-grid">
                 <?php if (isset($bills)): ?>
                     <?php foreach ($bills as $bill): ?>
@@ -76,20 +101,20 @@ if (!$user) {
                                     elseif ((string) $bill['importance'] === '2') { echo 'Média'; }
                                     else { echo 'Alta'; } ?>
                                 </p>
-                                <p>Próxima cobrança:
-                                    <?= str_pad((string) $bill['due_date'], 2, '0', STR_PAD_LEFT) . '/';
-                                    if ((int) $bill['due_date'] < (int) date('d')) {
-                                        echo (int) date('m') + 1;
-                                    } else {
-                                        echo date('m');
-                                    }
-                                ?></p>
+                                <p><?= bill_is_variable($bill) ? 'Data do gasto:' : 'Próxima cobrança:'; ?>
+                                    <?php $nextDate = bill_date_for_month($bill, new DateTimeImmutable($month . '-01')); ?>
+                                    <?= $nextDate ? htmlspecialchars($nextDate->format('d/m/Y'), ENT_QUOTES, 'UTF-8') : '-'; ?>
+                                </p>
                                 <p><?= htmlspecialchars($bill['description'], ENT_QUOTES, 'UTF-8'); ?></p>
-                                <form method="POST" action="../../controller/billController.php?acaoBill=paidBill">
-                                    <input type="hidden" name="id_bill" value="<?php= $bill=['id']; ?>">
-                                    <input type="checkbox" name="paidBill value="1" onchange="this.form.submit()">
-                                <form method="POST" action="../../controller/billController.php?acaoBill=deletarBill">
+                                <form method="POST" action="../../controller/billController.php?acao=paidBill">
+                                    <input type="hidden" name="id_bill" value="<?= (int) $bill['id']; ?>">
+                                    <input type="hidden" name="mes" value="<?= htmlspecialchars($month, ENT_QUOTES, 'UTF-8') ?>">
+                                    <input type="checkbox" name="paidBill" value="1" <?= (int) $bill['paid'] === 1 ? 'checked' : ''; ?> onchange="this.form.submit()">
+                                </form>
+                                <a class="btn btn-new" href="editar_conta.php?id=<?= (int)$bill['id'] ?>&mes=<?= urlencode($month) ?>">Editar conta</a>
+                                <form method="POST" action="../../controller/billController.php?acao=deletarBill">
                                     <input type="hidden" name="id_conta" value="<?= (int) $bill['id']; ?>">
+                                    <input type="hidden" name="mes" value="<?= htmlspecialchars($month, ENT_QUOTES, 'UTF-8') ?>">
                                     <button type="submit" class="btn btn-red">Apagar conta</button>
                                 </form>
                             </div>
@@ -100,14 +125,15 @@ if (!$user) {
         </div>
     </main>
 
-    <dialog class="new-bill" id="newBill">
+    <dialog class="new-bill" id="newBill" style="position:fixed;inset:0;margin:auto;max-height:calc(100vh - 32px);max-width:calc(100vw - 32px);overflow:auto;">
         <div class="new-bill-links">
             <button type="button" onclick="document.getElementById('newBill').close()" class="btn btn-back" aria-label="Voltar">
                 <i class="fa-solid fa-arrow-left-long"></i>
             </button>
             <h3>Nova Conta</h3>
         </div>
-        <form action="../../controller/new_bill.php" method="post">
+        <form action="../../controller/billController.php?acao=cadastrarBill" method="post">
+            <input type="hidden" name="mes" value="<?= htmlspecialchars($month, ENT_QUOTES, 'UTF-8') ?>">
             <div class="field">
                 <label for="new-bill-name">Nome da conta</label>
                 <input type="text" name="name" id="new-bill-name" placeholder="Ex.: Mensalidade" required>
@@ -172,53 +198,23 @@ if (!$user) {
     <script src="../../../assets/js/scrollIntooView.js"></script>
     <script>
         const typeSelect = document.getElementById('type');
-
         const fixedFields = document.getElementById('fixedFields');
         const variableFields = document.getElementById('variableFields');
-
-        typeSelect.addEventListener('change', function() {
-
-        if (typeSelect.value === 'fixed') {
-
-        fixedFields.style.display = 'block';
-        variableFields.style.display = 'none';
-
-        } else {
-
-        fixedFields.style.display = 'none';
-        variableFields.style.display = 'block';
-
+        function mostrarData() {
+            const fixa = typeSelect.value === 'fixed';
+            fixedFields.style.display = fixa ? 'block' : 'none';
+            variableFields.style.display = fixa ? 'none' : 'block';
+            fixedFields.querySelector('input').disabled = !fixa;
+            variableFields.querySelector('input').disabled = fixa;
         }
-});
-
-        const fixedInput = fixedFields.querySelector('input');
-        const variableInput = variableFields.querySelector('input');
-
-    typeSelect.addEventListener('change', function() {
-
-        if (typeSelect.value === 'fixed') {
-            fixedFields.style.display = 'block';
-            variableFields.style.display = 'none';
-
-            fixedInput.disabled = false;
-            variableInput.disabled = true;
-
-        } else {
-            fixedFields.style.display = 'none';
-            variableFields.style.display = 'block';
-
-            fixedInput.disabled = true;
-            variableInput.disabled = false;
-        }
-
-});
+        typeSelect.addEventListener('change', mostrarData);
+        mostrarData();
         const priceInput = document.getElementById('new-bill-price');
-        priceInput.addEventListener('input', () => {
+        priceInput.addEventListener('input', function() {
             const value = priceInput.value.replace(/\D/g, '');
-            priceInput.value = value ? (Number(value) / 100).toLocaleString('pt-BR', {
-                style: 'currency', currency: 'BRL'
-            }) : '';
+            priceInput.value = value ? (Number(value) / 100).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '';
         });
     </script>
+
 </body>
 </html>
